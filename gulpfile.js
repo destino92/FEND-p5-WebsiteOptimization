@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
 	cleanCSS = require('gulp-clean-css'),
 	uglify = require('gulp-uglify'),
-	concatify = require('gulp-concat');
+	concatify = require('gulp-concat'),
+	imageop = require('gulp-image-optimization');
 
