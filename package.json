@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/udacity/frontend-nanodegree-mobile-portfolio/issues"
   },
-  "homepage": "https://github.com/udacity/frontend-nanodegree-mobile-portfolio#readme"
+  "homepage": "https://github.com/udacity/frontend-nanodegree-mobile-portfolio#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
