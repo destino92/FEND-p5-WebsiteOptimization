@@ -32,7 +32,7 @@ gulp.task('imgResize',function(){
 			height: 62,
 			crop: true,
 			upscale: false,
-			quality: 0.9,
+			quality: 0.6,
 			imageMagick: true
 		}))
 		.pipe(gulp.dest('dist/img/'));
