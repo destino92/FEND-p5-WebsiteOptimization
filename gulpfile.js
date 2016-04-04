@@ -17,8 +17,9 @@ gulp.task('scripts', function(){
 gulp.task('images', function(){
 	return gulp.src(['img/profilepic.jpg','views/images/pizzeria.jpg'])
 		.pipe(imageop({
-			optimizationLevel: 5,
-			progressive: true
+			optimizationLevel: 3,
+			progressive: true,
+			interlaced: true
 		}))
 		.pipe(gulp.dest('dist/img/'));
 });
