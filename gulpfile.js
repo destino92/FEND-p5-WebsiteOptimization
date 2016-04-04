@@ -26,15 +26,16 @@ gulp.task('images', function(){
 });
 
 gulp.task('imgResize',function(){
-	return gulp.src('views/images/pizzeria.jpg')
+	return gulp.src('dist/img/pizzeria.jpg')
 		.pipe(imageResize({
-			width: 720,
-			height: 530,
+			width: 70,
+			height: 70,
 			crop: true,
 			upscale: false,
+			quality: 0.9,
 			imageMagick: true
 		}))
-		.pipe(gulp.dest('views/images/'));
+		.pipe(gulp.dest('dist/img/'));
 });
 
 gulp.task('copy', function(){
@@ -51,4 +52,4 @@ gulp.task('minify-css', function(){
 		.pipe(gulp.dest('dist/css/'));
 });
 
-gulp.task('default', ['minify-css','scripts','copy','imgResize','images']);
+gulp.task('default', ['minify-css','scripts','copy','images','imgResize']);
