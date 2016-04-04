@@ -13,3 +13,11 @@ gulp.task('scripts', function(){
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('dist/js'))
 });
+
+gulp.task('images', function(){
+	return gulp.src(['img/*','views/images/*.png'])
+		.pipe(imageop({
+			optimizationLevel: 5
+		}))
+		.pipe(gulp.dest('dist/img/'));
+});
