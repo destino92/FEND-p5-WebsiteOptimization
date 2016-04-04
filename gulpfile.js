@@ -14,10 +14,15 @@ gulp.task('scripts', function(){
 		.pipe(gulp.dest('dist/js'))
 });
 
-gulp.task('images', function(){
+/*gulp.task('images', function(){
 	return gulp.src(['img/*','views/images/*.png'])
 		.pipe(imageop({
 			optimizationLevel: 5
 		}))
 		.pipe(gulp.dest('dist/img/'));
+});*/
+
+gulp.task('copy', function(){
+	return gulp.src(['index.html','css/print.css'], {base: './'})
+		.pipe(gulp.dest('dist'));
 });
