@@ -26,3 +26,12 @@ gulp.task('copy', function(){
 	return gulp.src(['index.html','css/print.css'], {base: './'})
 		.pipe(gulp.dest('dist'));
 });
+
+gulp.task('minify-css', function(){
+	return gulp.src('css/style.css')
+		.pipe(sourcemaps.init())
+			.pipe(cleanCSS({compatibility: 'ie8'}))
+			//.pipe(concatify('style.min.css'))
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest('dist/css/style.min.css'));
+});
