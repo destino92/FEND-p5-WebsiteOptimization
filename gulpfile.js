@@ -28,8 +28,8 @@ gulp.task('images', function(){
 gulp.task('imgResize',function(){
 	return gulp.src('dist/img/pizzeria.jpg')
 		.pipe(imageResize({
-			width: 70,
-			height: 70,
+			width: 115,
+			height: 62,
 			crop: true,
 			upscale: false,
 			quality: 0.9,
