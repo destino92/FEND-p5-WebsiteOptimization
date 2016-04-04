@@ -3,7 +3,8 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	concatify = require('gulp-concat'),
 	imageop = require('gulp-image-optimization'),
-	sourcemaps = require('gulp-sourcemaps');
+	sourcemaps = require('gulp-sourcemaps'),
+	imageResize = require('gulp-image-resize');
 
 gulp.task('scripts', function(){
 	return gulp.src('js/*.js')
@@ -15,13 +16,26 @@ gulp.task('scripts', function(){
 });
 
 gulp.task('images', function(){
-	return gulp.src(['dist/img/'])
+	return gulp.src(['img/profilepic.jpg','views/images/pizzeria.jpg'])
 		.pipe(imageop({
-			optimizationLevel: 5,
+			optimizationLevel: 1,
 			progressive: true,
 			interlaced: true
 		}))
 		.pipe(gulp.dest('dist/img/'));
+});
+
+gulp.task('imgResize',function(){
+	return gulp.src('views/images/pizzeria.jpg')
+		.pipe(imageResize({
+			width: 720,
+			height: 530,
+			crop: true,
+			upscale: false,
+			imageMagick: true
+		}))
+		.pipe(gulp.dest('views/images/'));
+
 });
 
 gulp.task('copy', function(){
@@ -31,11 +45,11 @@ gulp.task('copy', function(){
 
 gulp.task('minify-css', function(){
 	return gulp.src('css/style.css')
-		.pipe(sourcemaps.init())
+		//.pipe(sourcemaps.init())
 			.pipe(cleanCSS({compatibility: 'ie8'}))
 			.pipe(concatify('style.min.css'))
-		.pipe(sourcemaps.write())
+		//.pipe(sourcemaps.write())
 		.pipe(gulp.dest('dist/css/'));
 });
 
-gulp.task('default', ['minify-css','scripts','copy','images']);
+gulp.task('default', ['minify-css','scripts','copy','imgResize','images']);
