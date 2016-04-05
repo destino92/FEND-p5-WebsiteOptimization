@@ -8,10 +8,10 @@ var gulp = require('gulp'),
 
 gulp.task('scripts', function(){
 	return gulp.src('js/*.js')
-		.pipe(sourcemaps.init())
+		//.pipe(sourcemaps.init())
 			.pipe(uglify())
 			.pipe(concatify('perfmatters.min.js'))
-		.pipe(sourcemaps.write())
+		//.pipe(sourcemaps.write())
 		.pipe(gulp.dest('dist/js'))
 });
 
