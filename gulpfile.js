@@ -33,9 +33,20 @@ gulp.task('imgResize',function(){
 			crop: true,
 			upscale: false,
 			quality: 0.6,
-			imageMagick: true
+			imageMagick: true,
+			progressive: true
 		}))
-		.pipe(gulp.dest('dist/img/'));
+		.pipe(gulp.dest('dist/img/'))
+		.pipe(imageResize({
+			width: 478,
+			height: 352,
+			crop: false,
+			upscale: true,
+			quality: 0.6,
+			imageMagick: true,
+			progressive: true
+		}))
+		.pipe(gulp.dest('dist/views/images/'));
 });
 
 gulp.task('copy', function(){
