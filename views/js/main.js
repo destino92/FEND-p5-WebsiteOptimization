@@ -499,12 +499,13 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 
 // items array to used as list of element with the class .mover in 
 // updatePositions
-var items = document.getElementsByClassName('mover'),
-    itemsLength = items.length;
+
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
-  var top = document.body.scrollTop;
+  var items       = document.getElementsByClassName('mover'),
+      itemsLength = items.length,
+      top         = document.body.scrollTop;
   frame++;
   window.performance.mark("mark_start_frame");
 
