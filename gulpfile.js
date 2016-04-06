@@ -28,16 +28,6 @@ gulp.task('images', function(){
 gulp.task('imgResize',function(){
 	return gulp.src('dist/img/pizzeria.jpg')
 		.pipe(imageResize({
-			width: 115,
-			height: 62,
-			crop: true,
-			upscale: false,
-			quality: 0.6,
-			imageMagick: true,
-			progressive: true
-		}))
-		.pipe(gulp.dest('dist/img/'))
-		.pipe(imageResize({
 			width: 478,
 			height: 352,
 			crop: false,
@@ -46,7 +36,17 @@ gulp.task('imgResize',function(){
 			imageMagick: true,
 			progressive: true
 		}))
-		.pipe(gulp.dest('dist/views/images/'));
+		.pipe(gulp.dest('dist/views/images/'))
+		.pipe(imageResize({
+			width: 115,
+			height: 62,
+			crop: true,
+			upscale: false,
+			quality: 0.6,
+			imageMagick: true,
+			progressive: true
+		}))
+		.pipe(gulp.dest('dist/img/'));
 });
 
 gulp.task('copy', function(){
