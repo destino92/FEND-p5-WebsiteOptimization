@@ -39,7 +39,7 @@ gulp.task('imgResize',function(){
 });
 
 gulp.task('copy', function(){
-	return gulp.src(['index.html','css/print.css','views/*'], {base: './'})
+	return gulp.src(['index.html','css/print.css','views/*/**'], {base: './'})
 		.pipe(gulp.dest('dist'));
 });
 
