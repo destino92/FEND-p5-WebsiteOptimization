@@ -32,7 +32,7 @@ gulp.task('imgResize',function(){
 			height: 352,
 			crop: false,
 			upscale: true,
-			quality: 0.6,
+			quality: 1,
 			imageMagick: true,
 			progressive: true
 		}))
