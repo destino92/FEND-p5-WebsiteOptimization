@@ -511,7 +511,6 @@ function updatePositions() {
 
   for (var i = 0; i < itemsLength; i++) {
     var phase = Math.sin((top / 1250) + (i % 5));
-    console.log(i % 5);
     //use transform instead of left
     items[i].style.transform = "translateX(" + (items[i].basicLeft + 100 * phase) + "px)";
   }
