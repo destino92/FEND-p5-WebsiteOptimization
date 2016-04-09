@@ -510,7 +510,8 @@ function updatePositions() {
   for (var i = 0; i < itemsLength; i++) {
     var phase = Math.sin((top / 1250) + (i % 5));
     //use transform instead of left
-    items[i].style.left = items[i].basicLeft + 100 * phase + "px";
+    items[i].style.transform = "translateX(" + ((items[i].basicLeft + 100 * phase) - winWidth) + "px)";
+    //items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -524,7 +525,8 @@ function updatePositions() {
 }
 
 var items = [],
-    itemsLength;
+    itemsLength,
+    winWidth = window.innerWidth;
 
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
@@ -533,7 +535,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 12;
   var s = 256;
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 35; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
