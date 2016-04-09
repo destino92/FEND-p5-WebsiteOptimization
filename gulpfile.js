@@ -27,25 +27,17 @@ gulp.task('profilepicJPG', function(){
 
 gulp.task('pizzaPNG', function(){
 	return gulp.src(['views/images/pizza.png'])
-		.pipe(imageResize({
-			width: 188,
-			height: 243,
-			crop: true,
-			upscale: false,
-			quality: 1,
-			imageMagick: true,
-			progressive: true
+		.pipe(imageop({
+			optimizationLevel: 5,
+			interlaced: true
 		}))
 		.pipe(gulp.dest('dist/views/images/'));
 })
 
 gulp.task('pizzeriaJPG',function(){
 	return gulp.src('views/images/pizzeria.jpg')
-		.pipe(imageResize({
-			width: 478,
-			height: 352,
-			quality: 1,
-			imageMagick: true,
+		.pipe(imageop({
+			optimizationLevel: 5,
 			progressive: true
 		}))
 		.pipe(gulp.dest('dist/views/images/'))
