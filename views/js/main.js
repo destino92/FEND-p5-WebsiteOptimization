@@ -402,10 +402,14 @@ var pizzaElementGenerator = function(i) {
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
 
+  // Instead of using
+  // document.querySelector("#pizzaSize").innerHTML
+  // use a variable.
   var sliderLabel = document.getElementById('pizzaSize');
 
   var newWidth = 0;
   // Changes the value for the size of the pizza above the slider
+  // and switch the pizza width as well.
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -425,13 +429,20 @@ var resizePizzas = function(size) {
     }
   }
 
-  changeSliderLabel(size);
+  // I have removed sizeSwitcher and merged it to changeSliderLabel
+  // Because they practicaly do the same thing 
 
+  changeSliderLabel(size);
+  // removed document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+  // from the loop instead use randomPizzas varibale.
   var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
 
   // Iterates through pizza elements on the page and changes their widths
+  // removed dx and new width from the for loop.
+  //  
   function changePizzaSizes(size) {
     for (var i = 0; i < randomPizzas.length; i++) {
+      // assign newWidth to randomPizzas as a percentage
       randomPizzas[i].style.width = newWidth + "%";
     }
   }
@@ -476,7 +487,6 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-winWidth = window.innerWidth/2
 // items array to be used as list of element with the class .mover in 
 // updatePositions
 // instead of using document query selector in the for
@@ -486,7 +496,8 @@ winWidth = window.innerWidth/2
 // only once. Allowing for it not to be defined everytime  
 // that the page scrolls.
 var items = [],
-    itemsLength;
+    itemsLength,
+    winWidth = window.innerWidth/2;
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
