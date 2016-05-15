@@ -30,17 +30,25 @@ gulp.task('htmlmin', function(){
 						removeComments: true,
 						minifyJS: true
 					}))
-    	.pipe(gulp.dest('dist'))
+    	.pipe(gulp.dest('dist/'))
 });
 
 // CSS concat, auto-prefix and minify
 gulp.task('styles', function() {
   	return gulp.src(['src/css/*.css'])
-  		.pipe(sourcemaps.init())
     	.pipe(concat('style.css'))
     	.pipe(autoprefix('last 2 versions'))
     	.pipe(cleanCSS())
     	.pipe(gulp.dest('dist/css/'))
+});
+
+// JS concat, strip debugging and minify
+gulp.task('scripts', function() {
+  return gulp.src('src/js/*.js')
+    .pipe(concat('app.js'))
+    .pipe(stripDebug())
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js/'))
 });
 
 gulp.task('watch', function(){
