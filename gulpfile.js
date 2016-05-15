@@ -55,7 +55,9 @@ gulp.task('watch', function(){
   	gulp.watch('src/*.html',['htmlmin']);
   	gulp.watch('src/js/*.js',['scripts']);
   	gulp.watch('src/css/*.css', ['styles']);
+  	gulp.watch('src/views/images/*', ['imagemin']);
+  	gulp.watch('src/img/*', ['pizzaimg']);
 })
 
 // default gulp task
-gulp.task('default', ['imagemin','pizzaimg','watch']);
+gulp.task('default', ['watch']);
