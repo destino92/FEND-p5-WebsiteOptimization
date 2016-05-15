@@ -476,21 +476,34 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-// items array to used as list of element with the class .mover in 
+winWidth = window.innerWidth/2
+// items array to be used as list of element with the class .mover in 
 // updatePositions
-
+// instead of using document query selector in the for
+// loop inside updatePositions function
+// define it globaly to be accessible by updatePositions
+// and the DOMContentLoaded callback where it will be set
+// only once. Allowing for it not to be defined everytime  
+// that the page scrolls.
+var items = [],
+    itemsLength;
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
+
+  // define scrollTop as variable instead of
+  // calling document.body.scrollTop in the following
+  // for Loop
   var top = document.body.scrollTop;
   frame++;
   window.performance.mark("mark_start_frame");
 
   for (var i = 0; i < itemsLength; i++) {
     var phase = Math.sin((top / 1250) + (i % 5));
-    //use transform instead of left
+
+    // use transform instead of left to avoid
+    // triggering layout and paint
     items[i].style.transform = "translateX(" + ((items[i].basicLeft + 100 * phase) - winWidth) + "px)";
-    //items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -503,32 +516,38 @@ function updatePositions() {
   }
 }
 
-var items = [],
-    itemsLength,
-    winWidth = window.innerWidth/2;
-
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = Math.ceil(window.innerWidth/256),
-      rows = Math.ceil(window.innerHeight/256),
+  // calculate total pizza based on window width and height
+  // divided by the space between each pizza and multipy them
+  // to each other to avoid having too many pizzas in the background
+  var s = 256
+      cols = Math.ceil(window.innerWidth/s),
+      rows = Math.ceil(window.innerHeight/s),
       totalPizza = cols * rows,
+      // get the div with the id of movingPizzas1
       movingPizzaDiv = document.getElementById("movingPizzas1");
 
-  console.log(totalPizza);
   for (var i = 0; i < totalPizza; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * 256;
-    elem.style.top = (Math.floor(i / cols) * 256) + 'px';
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    // append pizza image to movingPizzaDiv
     movingPizzaDiv.appendChild(elem);
+
+    // push pizza image element to the items array
     items.push(elem);
   }
-  itemsLength = items.length;
+  // update items array length
+  itemsLength++;
+
+  // call updatePostions function
   updatePositions();
 });
