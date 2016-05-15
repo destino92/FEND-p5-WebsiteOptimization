@@ -436,12 +436,13 @@ var resizePizzas = function(size) {
   // removed document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
   // from the loop instead use randomPizzas varibale.
   var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
-
+      // Set the random pizza length to be used in for Loop
+      randomPizzasLength = randomPizzas.length;
   // Iterates through pizza elements on the page and changes their widths
   // removed dx and new width from the for loop.
   //  
   function changePizzaSizes(size) {
-    for (var i = 0; i < randomPizzas.length; i++) {
+    for (var i = 0; i < randomPizzasLength; i++) {
       // assign newWidth to randomPizzas as a percentage
       randomPizzas[i].style.width = newWidth + "%";
     }
@@ -458,9 +459,11 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
+// Declare pizzasDiv outside the loop, so the function only makes one DOM call. 
+var pizzasDiv = document.getElementById("randomPizzas");
+
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -487,20 +490,47 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-// items array to used as list of element with the class .mover in 
+// items array to be used as list of element with the class .mover in 
 // updatePositions
+// instead of using document query selector in the for
+// loop inside updatePositions function
+// define it globaly to be accessible by updatePositions
+// Allowing for it not to be defined everytime  
+// that the page scrolls.
+var winWidth = window.innerWidth,
+    items,
+    itemsLength;
 
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
-  var top = document.body.scrollTop;
+  var top = document.body.scrollTop,
+      // Declare phase variable outside of the for loop
+      // to avoid it from being created every time the loop is executed.
+      phase,
+      // Because phase only have 5 different values
+      // We initialize consArray to contains all the 
+      // values of phase.
+      constArray = [];
+
   frame++;
   window.performance.mark("mark_start_frame");
 
-  for (var i = 0; i < itemsLength; i++) {
-    var phase = Math.sin((top / 1250) + (i % 5));
+  // updates items and itemsLenght value.
+  items = document.getElementsByClassName("mover");
+  itemsLength = items.length;
+
+  // Push value of phase to constArray
+  for(var i = 0; i < 5; i++ ){
+    constArray.push(Math.sin((top / 1250) + i));
+  }
+
+  for (var j = 0; j < itemsLength; j++) {
+    // select phase value from constArray using
+    // the current items index
+    phase = constArray[j % 5];
     //use transform instead of left
-    items[i].style.transform = "translateX(" + ((items[i].basicLeft + 100 * phase) - winWidth) + "px)";
+    items[j].style.transform = "translateX("  +  100 * phase + "px)";
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -513,10 +543,6 @@ function updatePositions() {
   }
 }
 
-var items = [],
-    itemsLength,
-    winWidth = window.innerWidth/2;
-
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
@@ -525,29 +551,31 @@ document.addEventListener('DOMContentLoaded', function() {
   // calculate total pizza based on window width and height
   // divided by the space between each pizza and multipy them
   // to each other to avoid having too many pizzas in the background
-  var s = 256
+  var s = 256,
       cols = Math.ceil(window.innerWidth/s),
       rows = Math.ceil(window.innerHeight/s),
       totalPizza = cols * rows,
       // get the div with the id of movingPizzas1
       movingPizzaDiv = document.getElementById("movingPizzas1");
 
+  // declare varialble elem outside the loop to prevent
+  // it from being created every time the loop is executed.;
+  var elem;
+
   for (var i = 0; i < totalPizza; i++) {
-    var elem = document.createElement('img');
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
+    // use elem.style.left instead of elem.basicLeft
+    // Because of translateX context of the transform
+    // property.
+    elem.style.left = (i % cols) * s + 'px';
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     // append pizza image to movingPizzaDiv
     movingPizzaDiv.appendChild(elem);
-
-    // push pizza image element to the items array
-    items.push(elem);
   }
-  // update items array length
-  itemsLength++;
 
   // call updatePostions function
   updatePositions();
