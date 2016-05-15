@@ -1,72 +1,53 @@
-var gulp = require('gulp'),
-	cleanCSS = require('gulp-clean-css'),
+var gulp = require('gulp');
+
+// include plug-ins
+var htmlmin = require('gulp-htmlmin'),
+	concat = require('gulp-concat'),
+	imagemin = require('gulp-imagemin'),
+	stripDebug = require('gulp-strip-debug'),
 	uglify = require('gulp-uglify'),
-	concatify = require('gulp-concat'),
-	imageop = require('gulp-image-optimization'),
-	sourcemaps = require('gulp-sourcemaps'),
-	imageResize = require('gulp-image-resize');
+	autoprefix = require('gulp-autoprefixer'),
+	cleanCSS = require('gulp-clean-css');
 
-gulp.task('scripts', function(){
-	return gulp.src('js/*.js')
-		//.pipe(sourcemaps.init())
-			.pipe(uglify())
-			.pipe(concatify('perfmatters.min.js'))
-		//.pipe(sourcemaps.write())
-		.pipe(gulp.dest('dist/js'))
+// minify new images
+gulp.task('imagemin', function() {
+  gulp.src('src/img/*')
+    .pipe(imagemin([imagemin.jpegtran(), imagemin.optipng()]))
+    .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('profilepicJPG', function(){
-	return gulp.src(['img/profilepic.jpg',])
-		.pipe(imageop({
-			optimizationLevel: 5,
-			progressive: true,
-			interlaced: true
-		}))
-		.pipe(gulp.dest('dist/img/'));
+gulp.task('pizzaimg', function() {
+  gulp.src('src/views/images/*')
+    .pipe(imagemin(imagemin.jpegtran(), imagemin.optipng()))
+    .pipe(gulp.dest('dist/views/images/*'));
 });
 
-gulp.task('pizzaPNG', function(){
-	return gulp.src(['views/images/pizza.png'])
-		.pipe(imageop({
-			optimizationLevel: 5,
-			interlaced: true
-		}))
-		.pipe(gulp.dest('dist/views/images/'));
+
+// htmlmin tastk
+gulp.task('htmlmin', function(){
+	return gulp.src(['src/*.html'])
+		.pipe(htmlmin({collapseWhitespace: true,
+						removeComments: true,
+						minifyJS: true
+					}))
+    	.pipe(gulp.dest('dist'))
+});
+
+// CSS concat, auto-prefix and minify
+gulp.task('styles', function() {
+  	return gulp.src(['src/css/*.css'])
+  		.pipe(sourcemaps.init())
+    	.pipe(concat('style.css'))
+    	.pipe(autoprefix('last 2 versions'))
+    	.pipe(cleanCSS())
+    	.pipe(gulp.dest('dist/css/'))
+});
+
+gulp.task('watch', function(){
+  	gulp.watch('src/*.html',['htmlmin']);
+  	gulp.watch('src/js/*.js',['scripts']);
+  	gulp.watch('src/css/*.css', ['styles']);
 })
 
-gulp.task('pizzeriaJPG',function(){
-	return gulp.src('views/images/pizzeria.jpg')
-		.pipe(imageop({
-			optimizationLevel: 5,
-			progressive: true
-		}))
-		.pipe(gulp.dest('dist/views/images/'))
-		.pipe(imageResize({
-			width: 115,
-			height: 62,
-			crop: true,
-			upscale: false,
-			quality: 0.6,
-			imageMagick: true,
-			progressive: true
-		}))
-		.pipe(gulp.dest('dist/img/'));
-});
-
-gulp.task('copy', function(){
-	return gulp.src(['index.html','css/print.css','views/*/**'], {base: './'})
-		.pipe(gulp.dest('dist'));
-});
-
-gulp.task('imgOptimization', ['profilepicJPG','pizzaPNG','pizzeriaJPG'])
-
-gulp.task('minify-css', function(){
-	return gulp.src('css/style.css')
-		//.pipe(sourcemaps.init())
-			.pipe(cleanCSS({compatibility: 'ie8'}))
-			.pipe(concatify('style.min.css'))
-		//.pipe(sourcemaps.write())
-		.pipe(gulp.dest('dist/css/'));
-});
-
-gulp.task('default', ['minify-css','scripts','copy','imgOptimization']);
+// default gulp task
+gulp.task('default', ['imagemin','pizzaimg','watch']);
